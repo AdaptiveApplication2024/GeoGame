@@ -1,112 +1,104 @@
-# 游戏化地理学习Web应用
+# Gamified Geography Learning Web Application
 
-一个通过游戏化quiz和地图可视化帮助用户学习地理知识的Web应用。
+A Web application that helps users learn geography through gamified quizzes and map visualization.
 
-## 项目简介
+## Project Overview
 
-本项目是一个教育性的地理学习平台，通过游戏化的方式帮助用户学习世界各国的知识。用户可以通过回答关于国家的问题来获得积分，解锁新的国家，并在交互式地图上查看学习进度。
+This project is an educational geography learning platform that helps users learn about countries around the world through gamification. Users can earn points by answering questions about countries, unlock new countries, and view their learning progress on an interactive map.
 
-### 主要功能
+### Main Features
 
-- 用户注册和登录系统
-- 个性化地理知识测验
-- 游戏化学习机制（积分、国家解锁）
-- 交互式地图可视化
-- 学习进度追踪
+- User registration and login system
+- Personalized geography knowledge quizzes
+- Gamified learning mechanism (points, country unlocking)
+- Interactive map visualization
+- Learning progress tracking
 
-## 技术栈
+## Technology Stack
 
-- 后端：Python + Flask
-- 数据库：SQLite
-- 前端：React + TypeScript（计划中）
-- 地图：Leaflet.js（计划中）
+- Backend: Python + Flask
+- Database: SQLite
+- Frontend: React + TypeScript (planned)
+- Map: Leaflet.js (planned)
 
-## 项目结构
+## Project Structure
 
 ```
 geo-learning-app/
 ├── backend/
-│   ├── app.py              # Flask主应用
-│   ├── models/             # 数据模型
-│   │   ├── country.py      # 国家模型
-│   │   └── user.py         # 用户模型
-│   ├── services/           # 业务逻辑
-│   │   ├── quiz.py         # 测验服务
-│   │   └── progress.py     # 进度服务
-│   ├── db/                 # 数据库
-│   │   └── geo_app.db      # SQLite数据库
-│   ├── data/               # 数据文件
-│   │   └── countries.json  # 国家数据
-│   └── init_db.py          # 数据库初始化脚本
-├── frontend/               # 前端代码（计划中）
-├── venv/                   # Python虚拟环境
-└── README.md              # 项目文档
+│   ├── app.py              # Flask main application
+│   ├── models/             # Data models
+│   │   ├── country.py      # Country model
+│   │   └── user.py         # User model
+│   ├── services/           # Business logic
+│   │   ├── quiz.py         # Quiz service
+│   │   └── progress.py     # Progress service
+│   ├── db/                 # Database
+│   │   └── geo_app.db      # SQLite database
+│   ├── data/               # Data files
+│   │   └── countries.json  # Country data
+│   └── init_db.py          # Database initialization script
+├── frontend/               # Frontend code (planned)
+├── venv/                   # Python virtual environment
+└── README.md              # Project documentation
 ```
 
-## 安装说明
+## Installation Instructions
 
-1. 克隆项目
+1. Clone the project
 ```bash
-git clone [项目地址]
-cd geo-learning-app
+git clone [url]
+cd [dir]
 ```
 
-2. 创建并激活虚拟环境
+2. Create and activate virtual environment
 ```bash
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
-# 或
+# or
 .\venv\Scripts\activate  # Windows
 ```
 
-3. 安装依赖
+3. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-4. 初始化数据库
+4. Initialize the database
 ```bash
 python backend/init_db.py
 ```
 
-5. 运行应用
+5. Run the application
 ```bash
 python backend/app.py
 ```
 
-应用将在 http://localhost:5001 运行
+The application will run at http://localhost:5001
 
-## API文档
+## API Documentation
 
-### 用户相关
-- POST /api/register - 用户注册
-- POST /api/login - 用户登录
+### User Related
+- POST /api/register - User registration
+- POST /api/login - User login
 
-### 测验相关
-- GET /api/quiz - 获取测验题目
-- POST /api/submit - 提交答案
+### Quiz Related
+- GET /api/quiz - Get quiz questions
+- POST /api/submit - Submit answers
 
-### 进度相关
-- GET /api/progress - 获取学习进度
-- GET /api/countries - 获取国家列表
+### Progress Related
+- GET /api/progress - Get learning progress
+- GET /api/countries - Get country list
 
-## 开发状态
+## Development Status
 
-- [x] 项目初始化
-- [x] 后端基础架构
-- [ ] 数据库实现
-- [ ] API实现
-- [ ] 前端开发
-- [ ] 地图集成
+- [ ] Project initialization
+- [ ] Backend infrastructure
+- [ ] Database implementation
+- [ ] API implementation
+- [ ] Frontend development
+- [ ] Map integration
 
-## 贡献指南
+## License
 
-1. Fork 项目
-2. 创建特性分支
-3. 提交更改
-4. 推送到分支
-5. 创建 Pull Request
-
-## 许可证
-
-MIT License 
+MIT License

@@ -3,34 +3,35 @@ from extensions import db
 import json
 import os
 
+
 def init_db():
     with app.app_context():
-        # 创建所有表
+        # Create all tables
         db.create_all()
-        
-        # 检查countries.json是否存在
+
+        # Check if countries.json exists
         data_path = os.path.join(os.path.dirname(__file__), 'data', 'countries.json')
         if not os.path.exists(data_path):
-            print(f"警告: countries.json 文件不存在于 {data_path}")
+            print(f"Warning: countries.json file does not exist at {data_path}")
             return
-        
-        # 读取并导入国家数据
+
+        # Read and import country data
         with open(data_path, 'r', encoding='utf-8') as f:
             countries = json.load(f)
-            
+
         from models.country import Country
-        
-        # 清空现有数据
+
+        # Clear existing data
         Country.query.delete()
-        
-        # 逐个添加国家数据
+
+        # Add country data one by one
         for country_data in countries:
             try:
-                # 处理NationalSport字段，如果是列表则取第一个
+                # Handle NationalSport field, take the first one if it's a list
                 national_sport = country_data['NationalSport']
                 if isinstance(national_sport, list):
                     national_sport = national_sport[0]
-                
+
                 country = Country(
                     ISO=country_data['ISO'],
                     Country=country_data['Country'],
@@ -45,10 +46,11 @@ def init_db():
                 db.session.commit()
             except Exception as e:
                 db.session.rollback()
-                print(f"导入国家 {country_data.get('Country')} 时出错: {str(e)}")
+                print(f"Error importing country {country_data.get('Country')}: {str(e)}")
                 continue
-        
-        print("数据库初始化成功！")
+
+        print("Database initialized successfully!")
+
 
 if __name__ == '__main__':
-    init_db() 
+    init_db()
