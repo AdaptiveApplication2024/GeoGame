@@ -4,8 +4,8 @@ from extensions import db
 class Country(db.Model):
     __tablename__ = 'countries'
 
-    ISO = db.Column(db.String(2), primary_key=True)
-    Country = db.Column(db.String(100), nullable=False)
+    Country = db.Column(db.String(100), primary_key=True)
+    ISO = db.Column(db.String(2), nullable=False)
     Capital = db.Column(db.String(100))
     Currency = db.Column(db.String(100))
     NationalSport = db.Column(db.String(100))
@@ -15,8 +15,8 @@ class Country(db.Model):
 
     def to_dict(self):
         return {
-            'iso': self.ISO,
             'country': self.Country,
+            'iso': self.ISO,
             'capital': self.Capital,
             'currency': self.Currency,
             'national_sport': self.NationalSport,
@@ -26,8 +26,8 @@ class Country(db.Model):
         }
 
     @classmethod
-    def get_neighbours(cls, iso):
-        country = cls.query.get(iso)
+    def get_neighbours(cls, country_name):
+        country = cls.query.get(country_name)
         if country and country.Neighbours:
             return country.Neighbours.split(',')
         return []

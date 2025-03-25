@@ -80,7 +80,7 @@ def submit_answer():
     if not data or 'user_id' not in data or 'question_id' not in data or 'answer' not in data:
         return jsonify({"error": "Missing required fields"}), 400
 
-    is_correct, result = QuizService.check_answer(data['question_id'], data['answer'])
+    is_correct, result = QuizService.check_answer(data['question_id'], data['answer'], data['user_id'])
 
     # Update user score
     if is_correct:

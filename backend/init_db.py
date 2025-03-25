@@ -33,8 +33,8 @@ def init_db():
                     national_sport = national_sport[0]
 
                 country = Country(
-                    ISO=country_data['ISO'],
                     Country=country_data['Country'],
+                    ISO=country_data['ISO'],
                     Capital=country_data['Capital'],
                     Currency=country_data['Currency'],
                     NationalSport=national_sport,

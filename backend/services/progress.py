@@ -11,20 +11,15 @@ class ProgressService:
         if not user:
             return None
 
-        # Get unlocked countries
-        unlocked_countries = []
-        if user.current_location:
-            current_country = Country.query.get(user.current_location)
-            if current_country:
-                unlocked_countries.append(current_country)
-                # Add unlocked neighboring countries
-                for neighbour_iso in Country.get_neighbours(current_country.ISO):
-                    neighbour = Country.query.get(neighbour_iso)
-                    if neighbour:
-                        unlocked_countries.append(neighbour)
-
         # Get all countries
         all_countries = Country.query.all()
+
+        # Get unlocked countries
+        unlocked_countries = []
+        for country_name in user.get_unlocked_countries():
+            country = Country.query.get(country_name)
+            if country:
+                unlocked_countries.append(country)
 
         # Calculate progress
         total_countries = len(all_countries)

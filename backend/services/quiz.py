@@ -26,9 +26,9 @@ class QuizService:
             if current_country:
                 available_countries.append(current_country)
                 # Add unlocked neighboring countries
-                for neighbour_iso in current_country.Neighbours.split(',') if current_country.Neighbours else []:
-                    neighbour = Country.query.get(neighbour_iso)
-                    if neighbour:
+                for neighbour_name in current_country.Neighbours.split(',') if current_country.Neighbours else []:
+                    neighbour = Country.query.get(neighbour_name)
+                    if neighbour and neighbour_name in user.get_unlocked_countries():
                         available_countries.append(neighbour)
         elif user.nationality:
             # Start from nationality country
@@ -36,9 +36,9 @@ class QuizService:
             if nationality_country:
                 available_countries.append(nationality_country)
                 # Add unlocked neighboring countries
-                for neighbour_iso in nationality_country.Neighbours.split(',') if nationality_country.Neighbours else []:
-                    neighbour = Country.query.get(neighbour_iso)
-                    if neighbour:
+                for neighbour_name in nationality_country.Neighbours.split(',') if nationality_country.Neighbours else []:
+                    neighbour = Country.query.get(neighbour_name)
+                    if neighbour and neighbour_name in user.get_unlocked_countries():
                         available_countries.append(neighbour)
 
         if not available_countries:
@@ -58,7 +58,7 @@ class QuizService:
         options = [correct_answer]
 
         # Get distractors from other countries
-        other_countries = Country.query.filter(Country.ISO != target_country.ISO).all()
+        other_countries = Country.query.filter(Country.Country != target_country.Country).all()
         random.shuffle(other_countries)
 
         for country in other_countries:
@@ -71,7 +71,7 @@ class QuizService:
         random.shuffle(options)
 
         return {
-            'question_id': f"{target_country.ISO}_{question_type}",
+            'question_id': f"{target_country.Country}_{question_type}",
             'question': question,
             'options': options,
             'country_iso': target_country.ISO,
@@ -79,14 +79,28 @@ class QuizService:
         }
 
     @staticmethod
-    def check_answer(question_id, user_answer):
-        country_iso, question_type = question_id.split('_')
-        country = Country.query.get(country_iso)
+    def check_answer(question_id, user_answer, user_id):
+        country_name, question_type = question_id.split('_')
+        country = Country.query.get(country_name)
         if not country:
             return False, "Country does not exist"
 
         correct_answer = getattr(country, question_type)
         is_correct = user_answer == correct_answer
+
+        if is_correct:
+            # 获取用户信息
+            user = User.query.get(user_id)
+            if user:
+                # 解锁当前国家
+                user.add_unlocked_country(country_name)
+                # 解锁邻国
+                if country.Neighbours:
+                    for neighbour_name in country.Neighbours.split(','):
+                        user.add_unlocked_country(neighbour_name)
+                # 更新用户分数
+                user.score += 10
+                db.session.commit()
 
         return is_correct, {
             'correct': is_correct,
