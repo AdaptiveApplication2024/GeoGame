@@ -23,6 +23,15 @@ from models.user import User
 
 
 # Routes
+
+@app.route('/', methods=['GET'])
+def root():
+    return jsonify({"message": "Welcome to the Geography Quiz App API!"})
+
+@app.route('/api', methods=['GET'])
+def api():
+    return jsonify({"message": "Use /register [POST] to register the user. Use /login [POST] to login the user. Use /quiz [GET] to generate the question. Use /submit [POST] to submit the answer. Use /progress [GET] to fetch user progress. Use /countries [GET] to fetch the countries"})
+
 @app.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
