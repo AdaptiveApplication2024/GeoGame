@@ -7,6 +7,7 @@ This is a Flask-based geography quiz game backend service, providing functions s
 - SQLite3
 
 ## Installation Steps
+In current directory (backend), follow these steps to install and run the service:
 
 1. Create and activate virtual environment:
 ```bash
@@ -18,18 +19,19 @@ source venv/bin/activate  # Linux/Mac
 
 2. Install dependencies:
 ```bash
+pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
 3. Initialize database:
 ```bash
+mkdir -p db # if first time running
 python init_db.py
 ```
 
 4. Start service:
 ```bash
-cd backend
-flask run --port=5001
+flask run --port=5001 # if not work, try to source venv/bin/activate double times
 ```
 
 The service will run at http://localhost:5001.
@@ -48,7 +50,7 @@ Specific commands are as follows:
 pkill -f "flask run"
 
 # 2. Delete database file
-rm -f quiz.db
+rm -f db/geo_app.db
 
 # 3. Reinitialize database
 python init_db.py
