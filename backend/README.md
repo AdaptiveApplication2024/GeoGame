@@ -19,6 +19,7 @@ source venv/bin/activate  # Linux/Mac
 
 2. Install dependencies:
 ```bash
+cd backend
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
