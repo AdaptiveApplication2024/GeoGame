@@ -19,7 +19,6 @@ source venv/bin/activate  # Linux/Mac
 
 2. Install dependencies:
 ```bash
-cd backend
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
@@ -70,7 +69,7 @@ curl -X POST http://localhost:5001/api/register \
   -H "Content-Type: application/json" \
   -d '{
     "email": "test@example.com",
-    "nationality": "MR",
+    "nationality": "Ireland",
     "password": "test123"
   }'
 ```
@@ -82,7 +81,7 @@ Expected response:
   "user": {
     "user_id": 1,
     "email": "test@example.com",
-    "nationality": "MR",
+    "nationality": "Ireland",
     "current_location": null,
     "score": 0
   }
@@ -106,7 +105,7 @@ Expected response:
   "user": {
     "user_id": 1,
     "email": "test@example.com",
-    "nationality": "MR",
+    "nationality": "Ireland",
     "current_location": null,
     "score": 0
   }
@@ -121,10 +120,10 @@ curl "http://localhost:5001/api/quiz?user_id=1"
 Expected response:
 ```json
 {
-  "question_id": "MR_Capital",
+  "question_id": "Ireland_Capital",
   "question": "What is the capital of Mauritania?",
   "options": ["Nouakchott", "Bamako", "Dakar", "Algiers"],
-  "country_iso": "MR",
+  "country_iso": "Ireland",
   "question_type": "Capital"
 }
 ```
@@ -135,7 +134,7 @@ curl -X POST http://localhost:5001/api/submit \
   -H "Content-Type: application/json" \
   -d '{
     "user_id": 1,
-    "question_id": "MR_Capital",
+    "question_id": "Ireland_Capital",
     "answer": "Nouakchott"
   }'
 ```
@@ -143,9 +142,9 @@ curl -X POST http://localhost:5001/api/submit \
 Expected response:
 ```json
 {
-  "correct": true,
-  "correct_answer": "Nouakchott",
-  "explanation": "The capital of Mauritania is Nouakchott."
+  "correct": false,
+  "correct_answer": "Dublin",
+  "explanation": "The capital of Ireland is Dublin."
 }
 ```
 
@@ -160,7 +159,7 @@ Expected response:
   "user": {
     "user_id": 1,
     "email": "test@example.com",
-    "nationality": "MR",
+    "nationality": "Ireland",
     "current_location": null,
     "score": 10
   },
