@@ -51,30 +51,9 @@ git clone [url]
 cd [dir]
 ```
 
-2. Create and activate virtual environment
-```bash
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# or
-.\venv\Scripts\activate  # Windows
-```
+2. Follow the instruction Readme.md in each service
 
-3. Install dependencies
-```bash
-pip install -r requirements.txt
-```
-
-4. Initialize the database
-```bash
-python backend/init_db.py
-```
-
-5. Run the application
-```bash
-python backend/app.py
-```
-
-The application will run at http://localhost:5001
+The backend application will run at http://localhost:5001
 
 ## API Documentation
 
