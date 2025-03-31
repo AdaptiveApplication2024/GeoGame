@@ -15,7 +15,7 @@ export default function QuizPage() {
     // const [lat, setLat] = useState(0);
     // const [lon, setLon] = useState(0);
     const [currentCountry, setCurrentCountry] = useState("");
-    const [previousQuestions, setPreviousQuestions] = useState([{id: 1, right: 'Ireland', answer: 'UK'} as PrevQuestion]);
+    const [previousQuestions, setPreviousQuestions] = useState([{id: 1, right: 'Ireland', answer: 'UK'} as PrevQuestion]); // eslint-disable-line
 
     const lat = 53.3;
     const lon = -6.3;
