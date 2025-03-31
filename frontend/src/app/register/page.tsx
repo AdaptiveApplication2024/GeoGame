@@ -21,7 +21,7 @@ export default function Register() {
                 email: email,
                 password: password,
                 nationality: nationality,
-                currentLocation: currentLocation
+                current_location: currentLocation
             })
         });
 
