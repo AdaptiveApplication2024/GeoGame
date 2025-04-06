@@ -12,6 +12,9 @@ class Country(db.Model):
     Neighbours = db.Column(db.String(500))  # Stored as comma-separated
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
+    Continent = db.Column(db.String(100))
+    Population = db.Column(db.Integer, default=0)
+    Languages = db.Column(db.String(100))
 
     def to_dict(self):
         return {
@@ -22,7 +25,10 @@ class Country(db.Model):
             'national_sport': self.NationalSport,
             'neighbours': self.Neighbours.split(',') if self.Neighbours else [],
             'latitude': self.latitude,
-            'longitude': self.longitude
+            'longitude': self.longitude,
+            'continent': self.Continent,
+            'population': self.Population,
+            'Languages': self.Languages
         }
 
     @classmethod

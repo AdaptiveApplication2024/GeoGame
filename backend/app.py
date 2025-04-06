@@ -35,16 +35,25 @@ def api():
 @app.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
-    if not data or 'email' not in data or 'password' not in data:
-        return jsonify({"error": "Missing required fields"}), 400
+    if not data or 'email' not in data or 'password' not in data or 'name' not in data or 'interested_in' not in data:
+        return jsonify({"error": "Missing one of the required fields: email, password, name, interested_in"}), 400
 
     if User.query.filter_by(email=data['email']).first():
         return jsonify({"error": "Email already registered"}), 400
 
+    valid_topics = {"Capital", "Continent", "Population", "Currency", "Languages", "NationalSport"}
+    interested_in_values = [item.strip() for item in data['interested_in'].split(',')]
+    invalid_values = [value for value in interested_in_values if value not in valid_topics]
+    if invalid_values:
+        return jsonify({"error": "Invalid Topic interested in"}), 400
+
     user = User(
         email=data['email'],
         nationality=data.get('nationality'),
-        current_location=data.get('current_location')
+        current_location=data.get('current_location'),
+        name=data.get('name'),
+        age=data.get('age'),
+        interested_in=data.get('interested_in')
     )
     user.set_password(data['password'])
 
@@ -70,6 +79,25 @@ def login():
     return jsonify({"message": "Login successful", "user": user.to_dict()})
 
 
+@app.route('/api/delete_user', methods=['DELETE'])
+def delete_user():
+    data = request.get_json()
+    if not data or 'email' not in data:
+        return jsonify({"error": "Missing required field: email"}), 400
+
+    user = User.query.filter_by(email=data['email']).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    try:
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({"message": "User deleted successfully"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route('/api/quiz', methods=['GET'])
 def get_quiz():
     user_id = request.args.get('user_id')
@@ -92,8 +120,8 @@ def submit_answer():
     is_correct, result = QuizService.check_answer(data['question_id'], data['answer'], data['user_id'])
 
     # Update user score
-    if is_correct:
-        ProgressService.update_user_score(data['user_id'], True)
+    '''if is_correct:
+        ProgressService.update_user_score(data['user_id'], True)'''
 
     return jsonify(result)
 

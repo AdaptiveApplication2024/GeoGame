@@ -70,22 +70,17 @@ curl -X POST http://localhost:5001/api/register \
   -d '{
     "email": "test@example.com",
     "nationality": "Ireland",
-    "password": "test123"
+    "password": "test123",
+    "current_location": "Ireland",
+    "name": "ABC",
+    "age": "25",
+    "interested_in": "Capital,Currency,Population"
   }'
 ```
 
 Expected response:
 ```json
-{
-  "message": "Registration successful",
-  "user": {
-    "user_id": 1,
-    "email": "test@example.com",
-    "nationality": "Ireland",
-    "current_location": null,
-    "score": 0
-  }
-}
+{"message":"Registration successful","user":{"age":25,"current_location":"Ireland","email":"test@example.com","interested_in":["Capital","Currency","Population"],"name":"ABC","nationality":"Ireland","score":0,"topic_progress":{},"unlocked_countries":[],"user_id":1}}
 ```
 
 ### 2. User Login
@@ -100,16 +95,7 @@ curl -X POST http://localhost:5001/api/login \
 
 Expected response:
 ```json
-{
-  "message": "Login successful",
-  "user": {
-    "user_id": 1,
-    "email": "test@example.com",
-    "nationality": "Ireland",
-    "current_location": null,
-    "score": 0
-  }
-}
+{"message":"Login successful","user":{"age":25,"current_location":"Ireland","email":"test@example.com","interested_in":["Capital","Currency","Population"],"name":"ABC","nationality":"Ireland","score":0,"topic_progress":{},"unlocked_countries":[],"user_id":1}}
 ```
 
 ### 3. Get Question
@@ -117,15 +103,17 @@ Expected response:
 curl "http://localhost:5001/api/quiz?user_id=1"
 ```
 
-Expected response:
+Expected responses:
 ```json
-{
-  "question_id": "Ireland_Capital",
-  "question": "What is the capital of Mauritania?",
-  "options": ["Nouakchott", "Bamako", "Dakar", "Algiers"],
-  "country_iso": "Ireland",
-  "question_type": "Capital"
-}
+{"available_countries":[{"Country":"Ireland","ISO":"IE"},{"Country":"United Kingdom","ISO":"GB"},{"Country":"Belgium","ISO":"BE"},{"Country":"Denmark","ISO":"DK"},{"Country":"France","ISO":"FR"},{"Country":"Germany","ISO":"DE"},{"Country":"Ireland","ISO":"IE"},{"Country":"The Netherlands","ISO":"NL"},{"Country":"Norway","ISO":"NO"},{"Country":"Faroe Islands","ISO":"FO"},{"Country":"Guernsey","ISO":"GG"}],"country_iso":"GG","options":["Stanley","Majuro","St Peter Port","Honiara"],"question":"What is the capital of Guernsey?","question_id":"Guernsey_Capital","question_type":"Capital"}
+```
+
+```json
+{"available_countries":[{"Country":"Ireland","ISO":"IE"},{"Country":"United Kingdom","ISO":"GB"},{"Country":"Belgium","ISO":"BE"},{"Country":"Denmark","ISO":"DK"},{"Country":"France","ISO":"FR"},{"Country":"Germany","ISO":"DE"},{"Country":"Ireland","ISO":"IE"},{"Country":"The Netherlands","ISO":"NL"},{"Country":"Norway","ISO":"NO"},{"Country":"Faroe Islands","ISO":"FO"},{"Country":"Guernsey","ISO":"GG"}],"country_iso":"GB","options":[66488991,2934855,11508,33785],"question":"What is the population of United Kingdom?","question_id":"United Kingdom_Population","question_type":"Population"}
+```
+
+```json
+{"available_countries":[{"Country":"Ireland","ISO":"IE"},{"Country":"United Kingdom","ISO":"GB"},{"Country":"Belgium","ISO":"BE"},{"Country":"Denmark","ISO":"DK"},{"Country":"France","ISO":"FR"},{"Country":"Germany","ISO":"DE"},{"Country":"Ireland","ISO":"IE"},{"Country":"The Netherlands","ISO":"NL"},{"Country":"Norway","ISO":"NO"},{"Country":"Faroe Islands","ISO":"FO"},{"Country":"Guernsey","ISO":"GG"}],"country_iso":"DK","options":["Krone","Euro","Lempira","Dollar"],"question":"What currency is used in Denmark?","question_id":"Denmark_Currency","question_type":"Currency"}
 ```
 
 ### 4. Submit Answer
@@ -134,18 +122,30 @@ curl -X POST http://localhost:5001/api/submit \
   -H "Content-Type: application/json" \
   -d '{
     "user_id": 1,
-    "question_id": "Ireland_Capital",
-    "answer": "Nouakchott"
+    "question_id": "Guernsey_Capital",
+    "answer": "St Peter Port"
   }'
 ```
 
 Expected response:
 ```json
-{
-  "correct": false,
-  "correct_answer": "Dublin",
-  "explanation": "The capital of Ireland is Dublin."
-}
+{"correct":true,"correct_answer":"St Peter Port","explanation":"The capital of Guernsey is St Peter Port."}
+```
+
+```bash
+curl -X POST http://localhost:5001/api/submit \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": 1,
+    "question_id": "United Kingdom_Population",
+    "answer": 2934855
+  }'
+```
+
+Expected response:
+```json
+{"correct":false,"correct_answer":66488991,"explanation":"The population of United Kingdom is 66488991."}
+
 ```
 
 ### 5. Get Progress
@@ -172,6 +172,21 @@ Expected response:
   "all_countries": [...]
 }
 ```
+### 6. Delete a User
+```bash
+curl -X DELETE http://localhost:5001/api/delete_user \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "test@example.com"
+  }'
+```
+
+Expected response:
+```json
+{"message":"User deleted successfully"}
+
+```
+
 
 ## Feature Description
 
