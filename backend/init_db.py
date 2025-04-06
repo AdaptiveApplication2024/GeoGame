@@ -32,6 +32,10 @@ def init_db():
                 if isinstance(national_sport, list):
                     national_sport = national_sport[0]
 
+                languages = country_data['Languages']
+                if isinstance(languages, list):
+                    languages = languages[0]
+
                 country = Country(
                     Country=country_data['Country'],
                     ISO=country_data['ISO'],
@@ -40,7 +44,10 @@ def init_db():
                     NationalSport=national_sport,
                     Neighbours=country_data['Neighbours'],
                     latitude=float(country_data.get('latitude', 0.0)),
-                    longitude=float(country_data.get('longitude', 0.0))
+                    longitude=float(country_data.get('longitude', 0.0)),
+                    Continent=country_data['Continent'],
+                    Population=int(country_data['Population']),
+                    Languages=languages
                 )
                 db.session.add(country)
                 db.session.commit()
