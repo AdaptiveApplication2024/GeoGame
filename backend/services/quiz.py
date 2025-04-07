@@ -107,7 +107,8 @@ class QuizService:
             'options': options,
             'country_iso': target_country.ISO,
             'question_type': question_type,
-            'available_countries': available_countries_dicts
+            'available_countries': available_countries_dicts,
+            'continent': target_country.Continent,
         }
 
     @staticmethod
