@@ -12,7 +12,7 @@ class QuizService:
         'NationalSport': 'What is the national sport of {country}?',
         'Continent': 'What is the continent of {country}?',
         'Population': 'What is the population of {country}?',
-        'Languages': 'What is one of the languages spoken in {country}?',
+        'Languages': 'What languages are spoken in {country}?',
         'Country': 'Where is {country}?'
     }
 
@@ -148,7 +148,8 @@ class QuizService:
             'options': options,
             'country_iso': target_country.ISO,
             'question_type': question_type,
-            'available_countries': available_countries_dicts
+            'available_countries': available_countries_dicts,
+            'continent': target_country.Continent,
         }
 
     @staticmethod
