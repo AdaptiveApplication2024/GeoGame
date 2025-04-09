@@ -1,6 +1,7 @@
 from models.country import Country
 from models.user import User
 from extensions import db
+from sqlalchemy import func
 import random
 
 
@@ -12,6 +13,7 @@ class QuizService:
         'Continent': 'What is the continent of {country}?',
         'Population': 'What is the population of {country}?',
         'Languages': 'What languages are spoken in {country}?',
+        'Country': 'Where is {country}?'
     }
 
     @staticmethod
@@ -28,12 +30,20 @@ class QuizService:
             # Start from current location
             current_country = Country.query.get(user.current_location)
             #print(f"Current country found: {current_country.Country}")
-            if current_country:
+            #print('current_country',current_country)
+            
+            #print(current_country not in user.get_unlocked_countries())
+            if current_country and user.current_location not in user.get_unlocked_countries():
                 available_countries.append(current_country)
                 # Add unlocked neighboring countries
                 for neighbour_name in current_country.Neighbours.split(',') if current_country.Neighbours else []:
                     #print(f"Neighbor name from database: {neighbour_name}")
                     neighbour = Country.query.get(neighbour_name)
+                    #print('available_countries:',available_countries)
+                    #print('neighbour',neighbour)
+                    #print('neighbour_name',neighbour_name)
+                    #print('unlocked_countries',user.get_unlocked_countries())
+                    #print(neighbour_name not in user.get_unlocked_countries())
                     if neighbour and neighbour_name not in user.get_unlocked_countries() and neighbour_name not in available_countries:
                         #print(f"Neighbor found and unlocked: {neighbour.Country}")
                         available_countries.append(neighbour)
@@ -42,10 +52,10 @@ class QuizService:
                             if neighbour_lvl2 and neighbour_name_lvl2 not in user.get_unlocked_countries() and neighbour_name_lvl2 not in available_countries:
                                 available_countries.append(neighbour_lvl2)
 
-        elif user.nationality:
+        if user.nationality:
             # Start from nationality country
             nationality_country = Country.query.get(user.nationality)
-            if nationality_country:
+            if nationality_country and user.nationality not in user.get_unlocked_countries():
                 available_countries.append(nationality_country)
                 # Add unlocked neighboring countries
                 for neighbour_name in nationality_country.Neighbours.split(',') if nationality_country.Neighbours else []:
@@ -58,14 +68,43 @@ class QuizService:
                             if neighbour_lvl2 and neighbour_name_lvl2 not in user.get_unlocked_countries() and neighbour_name_lvl2 not in available_countries:
                                 available_countries.append(neighbour_lvl2)
 
+        #print('available_countries:',available_countries)
+
+        #print(available_countries)
+
+        if not available_countries and user.get_unlocked_countries():
+            for country in user.get_unlocked_countries():
+                unlk_country = Country.query.get(country)
+                for neighbour_name in unlk_country.Neighbours.split(',') if unlk_country.Neighbours else []:
+                    neighbour = Country.query.get(neighbour_name)
+                    if neighbour and neighbour_name not in user.get_unlocked_countries() and neighbour_name not in available_countries:
+                        #print(f"Neighbor found and unlocked: {neighbour.Country}")
+                        available_countries.append(neighbour)
+
+
+        if not available_countries and user.get_unlocked_countries():
+            random_country = ""
+            while True:
+                random_country = Country.query.order_by(func.random()).first()
+                if random_country not in user.get_unlocked_countries():
+                    break
+            available_countries.append(random_country)
+
+        #print(available_countries)
+        
         if not available_countries:
             return None
+
+        unique_countries = set(available_countries)
+        available_countries = list(unique_countries)
 
         # Randomly select a country and question type
         target_country = random.choice(available_countries)
         question_topic = list(QuizService.QUESTION_TEMPLATES.keys())
         interested_in_topics = [item.strip() for item in user.interested_in.split(',')]
         question_topic = [topic for topic in question_topic if topic in interested_in_topics]
+        question_topic.append('Country')
+        #print(question_topic)
         question_type = random.choice(question_topic)
         
         
@@ -91,6 +130,8 @@ class QuizService:
                 options.append(option)
 
         random.shuffle(options)
+        if question_type == 'Country':
+            options = None
 
         # Convert Country objects to dictionaries
         available_countries_dicts = []
@@ -122,6 +163,7 @@ class QuizService:
             return False, "User does not exist"
 
         interested_in_topics = [item.strip() for item in user.interested_in.split(',')]
+        interested_in_topics.append('Country')
         if question_type not in interested_in_topics:
             return False, "Invalid Topic for the User"
 
