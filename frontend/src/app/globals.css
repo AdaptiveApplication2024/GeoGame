@@ -25,3 +25,11 @@ body {
     text-wrap: balance;
   }
 }
+
+.loginLabel {
+  @apply cursor-default
+}
+
+.whiteBox {
+  @apply p-2 rounded-lg border border-gray-300 bg-white
+}

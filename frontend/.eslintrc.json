@@ -1,3 +1,37 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "jsx-quotes": ["error", "prefer-double"],
+    "semi": ["error", "always"],
+    "no-console": "warn",
+    "no-multi-spaces": "error",
+    "no-unexpected-multiline": "error",
+    "no-duplicate-imports": "error",
+    "no-irregular-whitespace": "error",
+    "no-self-assign": "error",
+    "sort-imports": [
+      "error",
+      {
+        "ignoreCase": true,
+        "ignoreMemberSort": false,
+        "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
+      }
+    ],
+    "indent": ["error", 4],
+    "no-trailing-spaces": "error",
+    "block-spacing": ["error", "always"],
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "always-multiline",
+        "objects": "always-multiline",
+        "imports": "always-multiline",
+        "exports": "always-multiline",
+        "functions": "ignore"
+      }
+    ],
+    "brace-style": ["error", "1tbs"],
+    "eol-last": ["error", "always"],
+    "no-mixed-spaces-and-tabs": "error"
+  }
 }
