@@ -103,7 +103,9 @@ class QuizService:
         question_topic = list(QuizService.QUESTION_TEMPLATES.keys())
         interested_in_topics = [item.strip() for item in user.interested_in.split(',')]
         question_topic = [topic for topic in question_topic if topic in interested_in_topics]
-        question_topic.append('Country')
+
+        if (target_country.Population > 958919 and target_country.Country != 'Mauritius') or (target_country.Country in ['Luxembourg', 'Montenegro', 'Iceland']):
+            question_topic.append('Country')
         #print(question_topic)
         question_type = random.choice(question_topic)
         
@@ -168,6 +170,9 @@ class QuizService:
             return False, "Invalid Topic for the User"
 
         correct_answer = getattr(country, question_type)
+        print(f'User Answer: {user_answer}, {type(user_answer)}')
+        print(f'Correct Answer: {correct_answer}, {type(correct_answer)}')
+        print(user_answer == correct_answer)
         is_correct = user_answer == correct_answer
         
         

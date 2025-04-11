@@ -7,7 +7,17 @@ import { UserContext } from "../userContext";
 import { useRouter } from "next/navigation";
 
 
-const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+const geoUrl = "geography.json";
+
+const continentMap: Record<string, string> = {
+    AF: "Africa",
+    AN: "Antarctica",
+    AS: "Asia",
+    EU: "Europe",
+    NA: "North America",
+    OC: "Oceania",
+    SA: "South America",
+};
 
 interface PrevQuestion {
     question: string;
@@ -86,10 +96,20 @@ export default function QuizPage() {
     }
 
     async function submitAnswer() {
+        let answerForSubmission: number | string = answer;
+        if (Number(answer)) {
+            answerForSubmission = Number(answer);
+        }
+        if(question.question.split(" ")[0] === "Where") {
+            answerForSubmission = currentCountry;
+        }
+        if (answerForSubmission === "") {
+            return;
+        }
         const answerData = JSON.stringify({
             user_id: userId,
             question_id: question.question_id,
-            answer: answer,
+            answer: answerForSubmission,
         });
         const response = await fetch("http://localhost:5001/api/submit", {
             method: "POST",
@@ -104,7 +124,12 @@ export default function QuizPage() {
             if (currentPreviousQuestions.length > 6) {
                 currentPreviousQuestions = currentPreviousQuestions.slice(0, 6);
             }
-            setPreviousQuestions([{question: question.question, correct: data.correct, answer: answer}, ...currentPreviousQuestions]);
+            if(question.question.split(" ")[0] === "Where" && !data.correct) {
+                setPreviousQuestions([{question: question.question, correct: data.correct, answer: currentCountry}, ...currentPreviousQuestions]);
+            } else {
+                setPreviousQuestions([{question: question.question, correct: data.correct, answer: answer}, ...currentPreviousQuestions]);
+            }
+            setCurrentCountry("");
             getProgress();
             getQuestion();
             setAnswer("");
@@ -189,7 +214,9 @@ export default function QuizPage() {
                         { question.options && question.options.map((option: string | number) => (
                             option.toString() !== "" && (
                                 <div key={option} className="flex px-2 justify-between">
-                                    <p>{typeof option === 'number' ? option.toLocaleString('en') : option}</p>
+                                    <p>{
+                                        continentMap[option] ?? (typeof option === 'number' ? option.toLocaleString('en') : option)
+                                    }</p>
                                     <input
                                         type="radio"
                                         id={option.toString()}
@@ -210,13 +237,12 @@ export default function QuizPage() {
                 </div>
                 <div className="w-1/5 h-full space-y-1 p-2">
                     <h2 className="text-2xl font-semibold">Recent Questions</h2>
-                    {currentCountry}
                     {previousQuestions.map((prevQuestion, i) => (
                         <div className="whiteBox" key={'prevQuestion'+i}>
                             <h3 className="text-xl">{prevQuestion.question}</h3>
                             <div className="flex">
                                 <p>
-                                    {prevQuestion.correct ? "✅" : "❌"} {prevQuestion.answer}
+                                    {prevQuestion.correct ? "✅" : "❌"} {continentMap[prevQuestion.answer] ?? prevQuestion.answer}
                                 </p>
                             </div>
                         </div>
