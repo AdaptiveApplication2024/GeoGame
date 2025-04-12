@@ -170,9 +170,6 @@ class QuizService:
             return False, "Invalid Topic for the User"
 
         correct_answer = getattr(country, question_type)
-        print(f'User Answer: {user_answer}, {type(user_answer)}')
-        print(f'Correct Answer: {correct_answer}, {type(correct_answer)}')
-        print(user_answer == correct_answer)
         is_correct = user_answer == correct_answer
         
         
