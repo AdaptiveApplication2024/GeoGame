@@ -103,7 +103,9 @@ class QuizService:
         question_topic = list(QuizService.QUESTION_TEMPLATES.keys())
         interested_in_topics = [item.strip() for item in user.interested_in.split(',')]
         question_topic = [topic for topic in question_topic if topic in interested_in_topics]
-        question_topic.append('Country')
+
+        if (target_country.Population > 958919 and target_country.Country != 'Mauritius') or (target_country.Country in ['Luxembourg', 'Montenegro', 'Iceland']):
+            question_topic.append('Country')
         #print(question_topic)
         question_type = random.choice(question_topic)
         
